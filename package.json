@@ -1,0 +1,17 @@
+{
+  "name": "circle-simulator-vanilla",
+  "version": "1.0.0",
+  "description": "",
+  "main": "circle.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "node tools/template.js watch",
+    "build": "node tools/template.js"
+  },
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "twig": "^1.15.4"
+  }
+}

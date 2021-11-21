@@ -1,0 +1,50 @@
+body {
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+/* Configurator */
+
+.configurator {}
+
+.configurator__group {
+    display: block;
+    border: none;
+    margin-bottom: 2rem;
+    padding: 0;
+}
+
+.configurator__group-label {
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.configurator__tabular-input {
+    background: none;
+    border: none;
+    display: block;
+    font: inherit;
+    padding: 0.5em;
+    width: 100%;
+}
+
+/* Tables */
+
+.table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table__row {}
+
+.table__body .table__row:nth-child(odd) {
+    background-color: #F8F8F8;
+}
+
+.table__header,
+.table__data {
+    border: 1px solid grey;
+}
+
+.table__header {
+    padding: 0.5em;
+}
