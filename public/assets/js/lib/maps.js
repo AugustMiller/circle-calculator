@@ -4,19 +4,34 @@
 const data = {
     erangel: {
         name: 'Erangel',
-        dimensions: [8, 8],
+        size: 8000,
     },
     miramar: {
         name: 'Miramar',
-        dimensions: [8, 8],
+        size: 8000,
     },
     sanhok: {
         name: 'Sanhok',
-        dimensions: [4, 4],
+        size: 4000,
     },
     vikendi: {
         name: 'Vikendi',
-        dimensions: [6, 6],
+        size: 6000,
+    },
+    karakin: {
+        name: 'Karakin',
+        size: 2000,
+        disabled: true,
+    },
+    paramo: {
+        name: 'Paramo',
+        size: 3000,
+        disabled: true,
+    },
+    haven: {
+        name: 'Haven',
+        size: 1000,
+        disabled: true,
     },
 };
 
@@ -41,7 +56,7 @@ const getInfo = function (name) {
 };
 
 /**
- * Gets the "scale" of a map, by its name.
+ * Gets the "size" of a map, by its name.
  * 
  * @param {String} name
  * @return {Number}
@@ -49,7 +64,17 @@ const getInfo = function (name) {
 const getScale = function (name) {
     const map = getInfo(name);
 
-    return map.dimensions
+    return map.size;
+};
+
+/**
+ * Translates a proportion unit to "real" map length for the provided map name.
+ * 
+ * @param {String} name
+ * @param {number} pct
+ */
+const getRealDistance = function (name, pct) {
+    return pct * getScale(name);
 };
 
 export {
@@ -57,4 +82,5 @@ export {
     getUri,
     getInfo,
     getScale,
+    getRealDistance,
 };

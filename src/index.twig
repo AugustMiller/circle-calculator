@@ -16,7 +16,9 @@
                 <legend class="configurator__group-label">Map</legend>
                 <select class="configurator__map-select" name="map">
                     {% for k, map in maps %}
-                        <option value="{{ k }}">{{ map.name }}</option>
+                        <option
+                            value="{{ k }}"
+                            {% if map.disabled ?? false %}disabled{% endif %}>{{ map.name }}</option>
                     {% endfor %}
                 </select>
             </fieldset>

@@ -18,6 +18,7 @@ $map.height = RENDER_WIDTH;
 const updateMap = function () {
     const c = config.getCurrent($configurator);
     const h = config.createHash(c);
+    const map = maps.getInfo(c.map);
 
     // Save the change in the page fragment:
     window.location = `#${h}`;
@@ -25,7 +26,8 @@ const updateMap = function () {
     // Draw the current map:
     drawing.loadImage(maps.getUri(c.map))
         .then((e) => {
-            drawing.drawImage(e.target, $map);
+            drawing.drawImage($map, e.target);
+            drawing.drawGrid($map, map);
         });
 
     // Render representative circles:

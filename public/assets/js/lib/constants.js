@@ -1,4 +1,5 @@
 const RENDER_WIDTH = 800;
+const GRIDLINE_INTERVAL = 1000;
 
 const DEFAULT_SETTINGS = {
     map: 'erangel',
@@ -6,5 +7,6 @@ const DEFAULT_SETTINGS = {
 
 export {
     RENDER_WIDTH,
+    GRIDLINE_INTERVAL,
     DEFAULT_SETTINGS,
 };
