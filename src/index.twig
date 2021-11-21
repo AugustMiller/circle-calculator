@@ -36,9 +36,9 @@
                         </tr>
                     </thead>
                     <tbody class="table__body">
-                        {% for phase in 1..9 %}
+                        {% for phase in 0..8 %}
                             <tr class="table__row">
-                                <th class="table__header">Phase {{ phase }}</th>
+                                <th class="table__header">Phase {{ phase + 1 }}</th>
                                 <td class="table__data">
                                     <input
                                         class="configurator__tabular-input"
@@ -82,7 +82,7 @@
                                         type="number"
                                         name="bz[{{ phase }}][spread]"
                                         min="0"
-                                        max="10"
+                                        max="1"
                                         step="0.01"
                                         value="0.5">
                                 </td>
@@ -93,7 +93,16 @@
             </fieldset>
         </form>
 
-        <canvas id="map"></canvas>
+        <div class="map">
+            <canvas class="map__canvas" id="map"></canvas>
+            <div class="map__stats">
+                <div class="map__stat map__stat--duration" id="duration"></div>
+                <div class="map__stat map__stat--end" id="butthole"></div>
+                <div class="map__stat map__stat--inspector" id="coordinates"></div>
+            </div>
+        </div>
+
+        <button class="configurator__shuffle" id="shuffle">Simulate</button>
 
         <script src="/assets/js/circle.js" type="module"></script>
     </body>

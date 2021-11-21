@@ -1,10 +1,15 @@
 body {
     font-family: 'IBM Plex Mono', monospace;
+    padding: 1rem;
 }
 
 /* Configurator */
 
 .configurator {}
+
+.configurator__map-select {
+    padding: 0.5rem 3rem 0.5rem 0.5rem;
+}
 
 .configurator__group {
     display: block;
@@ -26,6 +31,29 @@ body {
     padding: 0.5em;
     width: 100%;
 }
+
+/* Map */
+
+.map {
+    position: relative;
+}
+
+.map__canvas {}
+
+.map__stats {
+    color: white;
+    left: 1rem;
+    position: absolute;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    top: 1rem;
+}
+
+.map__stat {
+    margin-bottom: 0.5rem;
+}
+
+.map__stat--inspector {}
+.map__stat--end {}
 
 /* Tables */
 

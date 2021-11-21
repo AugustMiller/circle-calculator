@@ -1,6 +1,6 @@
 import { RENDER_WIDTH, GRIDLINE_INTERVAL } from './constants.js';
 
-const CIRCLE_NEXT_COLOR = 'white';
+const CIRCLE_COLOR = 'white';
 const CIRCLE_WIDTH = 1;
 
 const GRIDLINE_COLOR = 'rgba(255, 255, 255, 0.25)';
@@ -47,7 +47,7 @@ const loadImage = function (url) {
  * @param {HTMLCanvasElement} $canvas
  * @param {Image} $img
  */
- const drawImage = function ($canvas, $img) {
+const drawImage = function ($canvas, $img) {
     getContext($canvas).drawImage($img, 0, 0, RENDER_WIDTH, RENDER_WIDTH);
 };
 
@@ -60,17 +60,33 @@ const loadImage = function (url) {
  * @param {Number} width
  * @param {String} color
  */
-const drawLine = function (ctx, start, end, width, color) {
+const drawLine = function (ctx, [x1, y1], [x2, y2], width, color) {
     ctx.lineWidth = width;
     ctx.strokeStyle = color;
 
-    console.log(`Line:`, start, end);
-
     ctx.beginPath();
-    ctx.moveTo(start[0], start[1]);
-    ctx.lineTo(end[0], end[1]);
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
     ctx.stroke();
 };
+
+/**
+ * Draws a circle with the specified center and radius.
+ * 
+ * @param {CanvasRenderingContext2D} ctx
+ * @param {Array} center Unit coordinate [x, y] pair.
+ * @param {Number} radius Unit distance
+ * @param {Number} width
+ * @param {String} color
+ */
+const drawCircle = function (ctx, [x, y], radius, width = CIRCLE_WIDTH, color = CIRCLE_COLOR) {
+    ctx.lineWidth = width;
+    ctx.strokeStyle = color;
+
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.stroke();
+ };
 
 /**
  * Draws gridlines for the passed map definition.
@@ -112,5 +128,6 @@ export {
     loadImage,
     drawImage,
     drawLine,
+    drawCircle,
     drawGrid,
 };
