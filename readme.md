@@ -15,7 +15,7 @@ $ npm install
 $ npm run watch
 ```
 
-This will generate an `index.html` file in the `public` directory, and continue to watch for changes to the template.
+This will generate an `index.html` file in the `docs` directory, and continue to watch for changes to the template.
 
 ### Note about Modules
 If you change any "data" files imported by the build script (i.e. `maps.js`), you'll have to terminate + re-start the watcher. There are probably some bundlers or task runners that are capable of restarting, but I can't be arsed to set something like that up.
@@ -23,8 +23,7 @@ If you change any "data" files imported by the build script (i.e. `maps.js`), yo
 
 ### Deployment
 
-The entire `public` directory can be uploaded to a server at any time!
-
+The entire `docs` directory can be uploaded to a server at any time! It's also automatically published to GitHub Pages, [here](https://augustmiller.github.io/circle-calculator).
 
 ### Docker?
 

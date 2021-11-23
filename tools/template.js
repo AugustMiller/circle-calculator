@@ -7,7 +7,7 @@ Twig.cache(false);
 import Logger from './logger.js';
 
 // Data
-import { data as maps } from '../public/assets/js/lib/maps.js';
+import { data as maps } from '../docs/assets/js/lib/maps.js';
 
 const args = process.argv.slice(2);
 const command = args[0];
