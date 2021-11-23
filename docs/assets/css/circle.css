@@ -32,6 +32,10 @@ body {
     width: 100%;
 }
 
+.configurator__controls {
+    margin: 2rem 0;
+}
+
 /* Map */
 
 .map {
