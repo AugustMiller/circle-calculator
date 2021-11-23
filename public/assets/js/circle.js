@@ -84,7 +84,7 @@ const renderMap = function (simulated = false) {
             const bearing = Math.random() * Math.PI * 2;
 
             // This is patently incorrect logic, at the moment, but I can't seem to track down any definitive explanation for the behavior!
-            const spread = circle.spread / (Math.random() * 2 + 2);
+            const spread = circle.spread / (Math.random() * 2 + 1);
 
             // There may not actually  be a "maximum" displacement, because the circle doesn't have to be inside the last one (as we've learned from “C4 and Cars”)!
             const maxDisplacement = (size - nextSize) / 2;
