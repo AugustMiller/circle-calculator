@@ -27,7 +27,7 @@ const compile = function () {
             return;
         }
 
-        fs.writeFile('public/index.html', html, function (err) {
+        fs.writeFile('docs/index.html', html, function (err) {
             if (err) {
                 logger.error(err);
 

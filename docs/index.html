@@ -507,18 +507,29 @@
                                             </tbody>
                 </table>
             </fieldset>
+
+            <div class="configurator__controls">
+                <button
+                    class="configurator__control"
+                    id="shuffle"
+                    type="button">Simulate</button>
+            </div>
         </form>
 
-        <div class="map">
-            <canvas class="map__canvas" id="map"></canvas>
-            <div class="map__stats">
-                <div class="map__stat map__stat--duration" id="duration"></div>
-                <div class="map__stat map__stat--end" id="butthole"></div>
-                <div class="map__stat map__stat--inspector" id="coordinates"></div>
-            </div>
-        </div>
 
-        <button class="configurator__shuffle" id="shuffle">Simulate</button>
+        <div class="output">
+            <div class="output__map">
+                <div class="map">
+                    <canvas class="map__canvas" id="map"></canvas>
+                    <div class="map__stats">
+                        <div class="map__stat map__stat--duration" id="duration"></div>
+                        <div class="map__stat map__stat--end" id="butthole"></div>
+                        <div class="map__stat map__stat--inspector" id="coordinates"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="output__phases"></div>
+        </div>
 
         <script src="assets/js/circle.js" type="module"></script>
     </body>
