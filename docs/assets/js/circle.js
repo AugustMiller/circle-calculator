@@ -223,16 +223,16 @@ const getMatchDuration = function () {
  * @param {PointerEvent} e
  */
 const handleMouseover = function (e) {
-    const x = Math.round(maps.getRealDistance(settings.map, e.offsetX / RENDER_WIDTH));
-    const y = Math.round(maps.getRealDistance(settings.map, e.offsetY / RENDER_WIDTH));
+    const unitX = e.offsetX / RENDER_WIDTH;
+    const unitY = e.offsetY / RENDER_WIDTH;
+    const x = Math.round(maps.getRealDistance(settings.map, unitX));
+    const y = Math.round(maps.getRealDistance(settings.map, unitY));
 
-    $coordinates.innerText = `Pointer: ${x}m, ${y}m`;
+    $coordinates.innerText = `Pointer: ${unitX.toFixed(2)}, ${unitY.toFixed(2)} (${x}m, ${y}m)`;
 };
 
 // Initialize with incoming or default settings:
 settings = window.location.hash ? config.parseHash(window.location.hash) : DEFAULT_SETTINGS;
-
-console.log(`Initializing with`, settings);
 
 // Apply config to the form:
 config.apply(settings, $configurator);
