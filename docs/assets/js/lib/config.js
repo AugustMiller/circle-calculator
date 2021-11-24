@@ -47,78 +47,132 @@ const getCurrent = function ($configurator) {
 
     for (let [k, v] of formData.entries()) {
         const $input = $configurator.elements[k];
-        const loc = parseInput($input);
+        let val = coerceValue(v);
+        let path = parseInputPath($input);
 
-        // Is it a plain key?
-        if (typeof loc === 'string') {
-            data[loc] = v;
-
-            continue;
-        }
-
-        // Otherwise, it should be a bluezone config option:
-        const phase = parseInt(loc.phase);
-        const setting = loc.setting;
-
-        // Make sure we have an object to work with at the phase index:
-        if (data.bz[phase]) {
-            data.bz[phase][setting] = parseFloat(v);
-        } else {
-            data.bz[phase] = { [setting]: parseFloat(v) };
-        }
+        _.set(data, path, val);
     }
 
     return data;
 };
 
 /**
- * Applies the config schema to the configurator form.
+ * Attempts to coerce a value into its native type.
+ * 
+ * @param {mixed} value
+ * @returns {mixed}
+ */
+const coerceValue = function (v) {
+    // Float?
+    const float = parseFloat(v);
+
+    if (!isNaN(float)) {
+        return float;
+    }
+
+    // More types?
+
+    return v;
+};
+
+/**
+ * Applies config to the configurator form.
  * 
  * @param {Object} config
  * @param {HTMLFormElement} $configurator
+ * @param {String} scope
  */
-const apply = function (config, $configurator) {
-    // Set map (and other single properties):
-    $configurator.elements.map.value = config.map;
+const apply = function (config, $configurator, scope = null) {
+    traverse(config, function (p, v) {
+        const $input = $configurator[getInputName(p)];
 
-    // Set phases:
-    for (let phase in config.bz) {
-        const settings = config.bz[phase];
+        $input.value = v;
+    });
+};
 
-        for (let prop in settings) {
-            $configurator.elements[getInputName(phase, prop)].value = settings[prop];
+/**
+ * Traverses an object and calls the closure with a "path" to each scalar value.
+ * 
+ * @param {Object} obj
+ * @param {Function} fn
+ */
+const traverse = function (obj, fn, path = []) {
+    for (let k in obj) {
+        const val = obj[k];
+        const cp = path.slice().concat([k]);
+
+        // Null check, because technically null is an Object in JS?
+        if (val !== null && typeof val === 'object') {
+            traverse(val, fn, cp);
+
+            // Move on, since we won't be setting anything at this level:
+            continue;
         }
+
+        // Ok, it's a scalar value... execute the callback:
+        fn(cp, val);
     }
 };
 
 /**
- * Builds an input `name` attribute for the provided bluezone phase value.
+ * Builds an input `name` attribute for the provided path.
  * 
  * This is basically the inverse of `getPhase()` and `getSetting()`!
  * 
- * @param {Number} phase
- * @param {String} setting
+ * @param {Array} path
  * @returns {String}
  */
-const getInputName = function (phase, setting) {
-    return `bz[${phase}][${setting}]`;
+const getInputName = function (path = []) {
+    // Don't faff around. Just return the first segment if that's it:
+    if (path.length === 1) {
+        return path[0];
+    }
+
+    const ns = path[0];
+    const segments = path.slice(1);
+
+    return `${ns}[${segments.join('][')}]`;
 }
 
 /**
- * Parses the input name and returns a config key.
+ * Parses the input name and returns a path to the config key.
  * 
  * @param {HTMLInputElement} $input 
- * @returns {Object}
+ * @returns {Array}
  */
-const parseInput = function ($input) {
-    const matches = $input.name.match(SETTING_INPUT_PATTERN);
+const parseInputPath = function ($input) {
+    const name = $input.name;
 
-    // Not a bluezone config option? Just return the name.
-    if (!matches) {
-        return $input.name;
+    // Get the namespace
+    const nsMatch = name.match(/^(\w+)/);
+
+    // Was it just a top-level namespace?
+    if (nsMatch && nsMatch[1] === name.length) {
+        return name;
     }
 
-    return matches.groups;
+    // Ok, we know it's present... save it for later:
+    const ns = nsMatch[1];
+
+    // Set up a place to store the expected path:
+    const path = [];
+
+    // And initialize a new string with just the stuff after the root “namespace”
+    let remainder = name.substr(ns.length);
+
+    while (remainder) {
+        const segmentMatch = /\[[\w\d]+\]/.exec(remainder);
+        const segment = segmentMatch ? segmentMatch[0] : null;
+
+        if (segment) {
+            // Push the path without the opening and closing brackets:
+            path.push(segment.substr(1, segment.length - 2));
+
+            remainder = remainder.substr(segment.length);
+        }
+    }
+
+    return [ns, ...path.map(coerceValue)];
 }
 
 /**

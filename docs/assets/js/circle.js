@@ -1,6 +1,9 @@
 import * as maps from './lib/maps.js';
 import * as config from './lib/config.js';
 import * as drawing from './lib/drawing.js';
+import MODES from './lib/modes.js';
+
+import { ensureProperty, style } from './lib/dom.js';
 
 import {
     RENDER_WIDTH,
@@ -8,13 +11,18 @@ import {
     INITIAL_CIRCLE_DIAMETER,
 } from './lib/constants.js';
 
+// Primary data + rendering
 const $configurator = document.getElementById('configurator');
 const $canvas = document.getElementById('map');
 
+const $squircle = document.getElementById('squircle-settings');
+
+// Output containers
 const $coordinates = document.getElementById('coordinates');
 const $butthole = document.getElementById('butthole');
 const $duration = document.getElementById('duration');
 
+// Controls
 const $shuffle = document.getElementById('shuffle');
 
 // Current configuration:
@@ -27,8 +35,25 @@ $canvas.height = RENDER_WIDTH;
  * Updates the map with an example circle progression.
  */
 const updateMap = function () {
+    // Pre-process some controls + data:
+    const mode = $configurator.elements.mode.value;
+
+    style($squircle, {
+        display: mode === MODES.SQUIRCLE ? 'block' : 'none',
+    });
+
+    Array.from($configurator.elements).forEach(function ($el) {
+        if (!$el.name.startsWith('squircle')) {
+            return;
+        }
+
+        ensureProperty($el, 'disabled', mode !== MODES.SQUIRCLE);
+    });
+
     // Update settings:
     settings = config.getCurrent($configurator);
+
+    console.log('Recieved new settings:', settings);
 
     const h = config.createHash(settings);
 
@@ -58,7 +83,6 @@ const getCurrentMap = function () {
 const renderMap = function (simulated = false) {
     const map = getCurrentMap();
     const $img = new Image;
-    const ctx = drawing.getContext($canvas);
     const timer = window.performance.now();
 
     // Re-create this? Gotta be a better way...
@@ -67,11 +91,29 @@ const renderMap = function (simulated = false) {
     drawing.drawImage($canvas, $img);
     drawing.drawGrid($canvas, map);
 
+    if (settings.mode === MODES.SQUIRCLE) {
+        renderSquircles(simulated);
+    } else {
+        renderCircles(simulated);
+    }
+
+    $duration.innerText = `Duration: ${getMatchDuration()}s`;
+
+    console.debug(`Render took ${window.performance.now() - timer}ms.`);
+};
+
+/**
+ * Renders the phase settings in Circle mode.
+ * 
+ * @param {Boolean} simulate
+ */
+const renderCircles = function (simulated = false) {
+    const ctx = drawing.getContext($canvas);
+
     const path = [];
     let size = INITIAL_CIRCLE_DIAMETER;
     let center = { x: 0.5, y: 0.5 };
 
-    // Render representative circles:
     for (let phase in settings.bz) {
         const circle = settings.bz[phase];
         const nextSize = size * circle.shrink;
@@ -123,9 +165,47 @@ const renderMap = function (simulated = false) {
     const endY = Math.round(maps.getRealDistance(settings.map, center.y));
 
     $butthole.innerText = `End: ${endX}m, ${endY}m`
-    $duration.innerText = `Duration: ${getMatchDuration()}s`;
+};
 
-    console.debug(`Render took ${window.performance.now() - timer}ms.`);
+/**
+ * Renders the phase settings in Squircle mode.
+ * 
+ * @param {Boolean} simulated
+ */
+const renderSquircles = function (simulated = false) {
+    if (settings.squircle === undefined) {
+        throw new Error('Tried to render squircles while in the wrong mode!');
+    }
+
+    const ctx = drawing.getContext($canvas);
+    const { x1, y1, x2, y2 } = settings.squircle;
+
+    let width = x2 - x1;
+    let height = y2 - y1;
+
+    let center = {
+        x: x1 + width / 2,
+        y: y1 + height / 2,
+    };
+
+    for (let phase in settings.bz) {
+        const squircle = settings.bz[phase];
+
+        width = width * squircle.shrink;
+        height = height * squircle.shrink;
+
+        drawing.drawRect(
+            ctx,
+            [
+                drawing.getRenderLength(center.x - width / 2),
+                drawing.getRenderLength(center.y - height / 2)
+            ],
+            [
+                drawing.getRenderLength(center.x + width / 2),
+                drawing.getRenderLength(center.y + height / 2)
+            ],
+        );
+    }
 };
 
 /**
@@ -151,6 +231,8 @@ const handleMouseover = function (e) {
 
 // Initialize with incoming or default settings:
 settings = window.location.hash ? config.parseHash(window.location.hash) : DEFAULT_SETTINGS;
+
+console.log(`Initializing with`, settings);
 
 // Apply config to the form:
 config.apply(settings, $configurator);

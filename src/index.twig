@@ -12,11 +12,11 @@
         <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&display=swap" rel="stylesheet">
     </head>
     <body>
-        <h1>Brendan’s Churfect Configurator</h1>
+        <h1>Brendan’s Churfect Bluezone Configurator</h1>
         <form class="configurator" id="configurator">
-            <fieldset class="configurator__group">
+            <fieldset class="configurator__group configurator__group--map">
                 <legend class="configurator__group-label">Map</legend>
-                <select class="configurator__map-select" name="map">
+                <select class="configurator__select" name="map">
                     {% for k, map in maps %}
                         <option
                             value="{{ k }}"
@@ -24,8 +24,78 @@
                     {% endfor %}
                 </select>
             </fieldset>
-            <fieldset class="configurator__group">
-                <legend class="configurator__group-label">Circle Settings</legend>
+            <fieldset class="configurator__group configurator__group--mode">
+                <legend class="configurator__group-label">Mode</legend>
+                <select class="configurator__select" name="mode">
+                    <option value="default">Default</option>
+                    <option value="squircle">Squircle</option>
+                </select>
+            </fieldset>
+
+            <fieldset class="configurator__group configurator__group--squircle" id="squircle-settings">
+                <legend class="configurator__group-label">Starting Bounds</legend>
+                <table class="table">
+                    <thead class="table__head">
+                        <tr class="table__row">
+                            <th class="table__header" colspan="2">NW Corner</th>
+                            <th class="table__header" colspan="2">SE Corner</th>
+                        </tr>
+                        <tr class="table__row">
+                            <th class="table__header">X1</th>
+                            <th class="table__header">Y1</th>
+                            <th class="table__header">X2</th>
+                            <th class="table__header">Y2</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table__body">
+                        <tr class="table__row">
+                            <td class="table__data">
+                                <input
+                                    class="configurator__tabular-input"
+                                    type="number"
+                                    name="squircle[x1]"
+                                    min="0"
+                                    max="1"
+                                    step="0.01"
+                                    value="0">
+                            </td>
+                            <td class="table__data">
+                                <input
+                                    class="configurator__tabular-input"
+                                    type="number"
+                                    name="squircle[y1]"
+                                    min="0"
+                                    max="1"
+                                    step="0.01"
+                                    value="0">
+                            </td>
+                            <td class="table__data">
+                                <input
+                                    class="configurator__tabular-input"
+                                    type="number"
+                                    name="squircle[x2]"
+                                    min="0"
+                                    max="1"
+                                    step="0.01"
+                                    value="1">
+                            </td>
+                            <td class="table__data">
+                                <input
+                                    class="configurator__tabular-input"
+                                    type="number"
+                                    name="squircle[y2]"
+                                    min="0"
+                                    max="1"
+                                    step="0.01"
+                                    value="1">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+
+            <fieldset class="configurator__group configurator__group--circle">
+                <legend class="configurator__group-label">Phases</legend>
                 <table class="table">
                     <thead class="table__head">
                         <tr class="table__row">
@@ -40,7 +110,7 @@
                     <tbody class="table__body">
                         {% for phase in 0..8 %}
                             <tr class="table__row">
-                                <th class="table__header">Phase {{ phase + 1 }}</th>
+                                <th class="table__header">{{ phase + 1 }}</th>
                                 <td class="table__data">
                                     <input
                                         class="configurator__tabular-input"
@@ -116,6 +186,9 @@
             <div class="output__phases"></div>
         </div>
 
+        <a href="#">Reset!!!</a>
+
+        <script src="assets/js/vendor/lodash.js"></script>
         <script src="assets/js/circle.js" type="module"></script>
     </body>
 </html>

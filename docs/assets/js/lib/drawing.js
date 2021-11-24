@@ -71,6 +71,26 @@ const drawLine = function (ctx, [x1, y1], [x2, y2], width, color) {
 };
 
 /**
+ * Draws a rectangle to the provided context.
+ * 
+ * Defaults to the same appearance as a "Circle"
+ * 
+ * @param {CanvasRenderingContext2D} ctx
+ * @param {Array} nw Northwest corner coordinate pair
+ * @param {Array} se Southeast corner coordinate pair.
+ * @param {Number} width
+ * @param {String} color
+ */
+const drawRect = function (ctx, [x1, y1], [x2, y2], width = CIRCLE_WIDTH, color = CIRCLE_COLOR) {
+    ctx.lineWidth = width;
+    ctx.strokeStyle = color;
+
+    ctx.beginPath();
+    ctx.rect(x1, y1, x2 - x1, y2 - y1);
+    ctx.stroke();
+};
+
+/**
  * Draws a circle with the specified center and radius.
  * 
  * @param {CanvasRenderingContext2D} ctx
@@ -128,6 +148,7 @@ export {
     loadImage,
     drawImage,
     drawLine,
+    drawRect,
     drawCircle,
     drawGrid,
 };

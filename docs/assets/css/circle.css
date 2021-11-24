@@ -1,3 +1,8 @@
+:root {
+    --half-width: calc(50% - 2rem);
+    --full-width: calc(100% - 2rem);
+}
+
 body {
     font-family: 'IBM Plex Mono', monospace;
     padding: 1rem;
@@ -5,17 +10,27 @@ body {
 
 /* Configurator */
 
-.configurator {}
+.configurator {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -1rem;
+}
 
-.configurator__map-select {
+.configurator__select {
     padding: 0.5rem 3rem 0.5rem 0.5rem;
 }
 
 .configurator__group {
     display: block;
     border: none;
-    margin-bottom: 2rem;
+    margin: 0 1rem 2rem 1rem;
     padding: 0;
+    width: var(--full-width);
+}
+
+.configurator__group--map,
+.configurator__group--mode {
+    width: var(--half-width);
 }
 
 .configurator__group-label {
