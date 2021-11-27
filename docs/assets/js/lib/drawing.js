@@ -17,6 +17,20 @@ const getContext = function ($canvas) {
 };
 
 /**
+ * Clears the passed canvas element.
+ * 
+ * @param {HTMLCanvasElement} $canvas
+ */
+const clear = function ($canvas) {
+    getContext($canvas).clearRect(
+        0,
+        0,
+        getRenderLength(1),
+        getRenderLength(1),
+    );
+};
+
+/**
  * Converts a unit-coordinate to the appropriate distance in pixels.
  * 
  * @param {Number} coordinate Normalized between zero and one!
@@ -144,6 +158,7 @@ const drawGrid = function ($canvas, map) {
 
 export {
     getContext,
+    clear,
     getRenderLength,
     loadImage,
     drawImage,

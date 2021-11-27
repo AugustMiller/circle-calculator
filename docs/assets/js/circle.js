@@ -85,6 +85,9 @@ const renderMap = function (simulated = false) {
     const $img = new Image;
     const timer = window.performance.now();
 
+    // Clear the current drawing context:
+    drawing.clear($canvas);
+
     // Re-create this? Gotta be a better way...
     $img.src = maps.getImageUri(map);
 
