@@ -57,7 +57,9 @@ body {
     position: relative;
 }
 
-.map__canvas {}
+.map__canvas {
+    width: 800px;
+}
 
 .map__stats {
     color: white;

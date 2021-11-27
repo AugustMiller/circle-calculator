@@ -4,7 +4,7 @@ const CIRCLE_COLOR = 'white';
 const CIRCLE_WIDTH = 1;
 
 const GRIDLINE_COLOR = 'rgba(255, 255, 255, 0.25)';
-const GRIDLINE_WIDTH = 1;
+const GRIDLINE_WIDTH = 0.5;
 
 /**
  * Gets a drawing context for the provided canvas.
@@ -23,7 +23,7 @@ const getContext = function ($canvas) {
  * @returns {Number}
  */
 const getRenderLength = function (u) {
-    return u * RENDER_WIDTH;
+    return u * RENDER_WIDTH * window.devicePixelRatio;
 };
 
 /**
@@ -48,7 +48,7 @@ const loadImage = function (url) {
  * @param {Image} $img
  */
 const drawImage = function ($canvas, $img) {
-    getContext($canvas).drawImage($img, 0, 0, RENDER_WIDTH, RENDER_WIDTH);
+    getContext($canvas).drawImage($img, 0, 0, getRenderLength(1), getRenderLength(1));
 };
 
 /**
@@ -61,7 +61,7 @@ const drawImage = function ($canvas, $img) {
  * @param {String} color
  */
 const drawLine = function (ctx, [x1, y1], [x2, y2], width, color) {
-    ctx.lineWidth = width;
+    ctx.lineWidth = width * window.devicePixelRatio;
     ctx.strokeStyle = color;
 
     ctx.beginPath();
@@ -82,7 +82,7 @@ const drawLine = function (ctx, [x1, y1], [x2, y2], width, color) {
  * @param {String} color
  */
 const drawRect = function (ctx, [x1, y1], [x2, y2], width = CIRCLE_WIDTH, color = CIRCLE_COLOR) {
-    ctx.lineWidth = width;
+    ctx.lineWidth = width * window.devicePixelRatio;
     ctx.strokeStyle = color;
 
     ctx.beginPath();
@@ -100,7 +100,7 @@ const drawRect = function (ctx, [x1, y1], [x2, y2], width = CIRCLE_WIDTH, color 
  * @param {String} color
  */
 const drawCircle = function (ctx, [x, y], radius, width = CIRCLE_WIDTH, color = CIRCLE_COLOR) {
-    ctx.lineWidth = width;
+    ctx.lineWidth = width * window.devicePixelRatio;
     ctx.strokeStyle = color;
 
     ctx.beginPath();
@@ -126,8 +126,8 @@ const drawGrid = function ($canvas, map) {
         drawLine(
             ctx,
             [offset, 0],
-            [offset, RENDER_WIDTH],
-            GRIDLINE_WIDTH,
+            [offset, getRenderLength(RENDER_WIDTH)],
+            GRIDLINE_WIDTH * window.devicePixelRatio,
             GRIDLINE_COLOR,
         );
 
@@ -135,8 +135,8 @@ const drawGrid = function ($canvas, map) {
         drawLine(
             ctx,
             [0, offset],
-            [RENDER_WIDTH, offset],
-            GRIDLINE_WIDTH,
+            [getRenderLength(RENDER_WIDTH), offset],
+            GRIDLINE_WIDTH * window.devicePixelRatio,
             GRIDLINE_COLOR,
         );
     }

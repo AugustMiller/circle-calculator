@@ -28,8 +28,8 @@ const $shuffle = document.getElementById('shuffle');
 // Current configuration:
 let settings;
 
-$canvas.width = RENDER_WIDTH;
-$canvas.height = RENDER_WIDTH;
+$canvas.width = drawing.getRenderLength(1);
+$canvas.height = drawing.getRenderLength(1);
 
 /**
  * Updates the map with an example circle progression.
@@ -97,7 +97,7 @@ const renderMap = function (simulated = false) {
         renderCircles(simulated);
     }
 
-    $duration.innerText = `Duration: ${getMatchDuration()}s`;
+    $duration.innerText = `Duration: ${humanDuration(getMatchDuration())}`;
 
     console.debug(`Render took ${window.performance.now() - timer}ms.`);
 };
@@ -215,6 +215,25 @@ const getMatchDuration = function () {
     return settings.bz.reduce(function (duration, phase) {
         return duration + phase.delay + phase.wait + phase.move;
     }, 0);
+};
+
+/**
+ * Returns the duration in a human-friendly format.
+ * 
+ * @param {Number} seconds
+ * @return {String}
+ */
+const humanDuration = function (seconds) {
+    let str = Math.floor(seconds / 60);
+    let s = seconds % 60;
+
+    if (s < 10) {
+        str = `${str}:0${s}`;
+    } else {
+        str = `${str}:${s}`;
+    }
+
+    return str;
 };
 
 /**
